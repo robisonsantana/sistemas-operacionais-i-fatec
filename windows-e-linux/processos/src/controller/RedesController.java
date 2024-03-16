@@ -55,10 +55,10 @@ public class RedesController {
 		String comando;
 		if(sistemaOpreracional.equals("Windows")) {
 			comando = "ping -4 -n 10 www.google.com.br";
-			readProcessPing(comando);
+			readProcessPingWindows(comando);
 		} else if(sistemaOpreracional.equals("Linux")) {
 			comando = "ping -4 -c 10 www.google.com.br";
-			readProcessPing(comando);
+			readProcessPingLinux(comando);
 		} else {
 			System.out.println("Sistema operacional não suportado!");
 		}
@@ -95,9 +95,9 @@ public class RedesController {
 		}
 	}
 	
-	//Processo para ler a média do ping de 10 processos. 
+	//Processo para ler a média do ping de 10 processos Windows(português). 
 	@SuppressWarnings("deprecation")
-	public void readProcessPing(String comando) {
+	public void readProcessPingWindows(String comando) {
 		Process processo;
 		try {
 			processo = Runtime.getRuntime().exec(comando);
@@ -113,7 +113,7 @@ public class RedesController {
 				if(linha.contains("tempo=")) {
 					
 					//Capturando os índices do tempo 
-					int indiceInicio = linha.indexOf("tempo=") + 6; //Pegando o indice de "tempo=" e pulando +5 para que a o valor do tempo seja capturado
+					int indiceInicio = linha.indexOf("tempo=") + 6; //Pegando o indice de "tempo=" e pulando +6 para que a o valor do tempo seja capturado
 					int indiceFim = linha.indexOf("ms"); //Pegando o indice do fim do tempo
 					
 					//Armazenando o valor encontrado em uma substring e convertendo para double
@@ -135,4 +135,45 @@ public class RedesController {
 		}
 		
 	}
+	
+	//Processo para ler a média do ping de 10 processos Linux. 
+		@SuppressWarnings("deprecation")
+		public void readProcessPingLinux(String comando) {
+			Process processo;
+			try {
+				processo = Runtime.getRuntime().exec(comando);
+				InputStream fluxo = processo.getInputStream();
+				InputStreamReader leitor = new InputStreamReader(fluxo);
+				BufferedReader buffer = new BufferedReader(leitor);
+				String linha;	
+				int count = 0;
+				double tempoTotal = 0;
+				System.out.println("Aguarde...");
+				while((linha = buffer.readLine()) != null) {
+					System.out.println(linha);
+					if(linha.contains("time=")) {
+						
+						//Capturando os índices do tempo 
+						int indiceInicio = linha.indexOf("time=") + 5; //Pegando o indice de "tempo=" e pulando +5 para que a o valor do tempo seja capturado
+						int indiceFim = linha.indexOf(" ms"); //Pegando o indice do fim do tempo
+						
+						//Armazenando o valor encontrado em uma substring e convertendo para double
+						String tempoStr = linha.substring(indiceInicio, indiceFim);
+						
+						//Convertendo o tempo String para double
+						double tempo = Double.parseDouble(tempoStr);
+						tempoTotal += tempo;
+						count++;
+					}
+				}
+				double tempoMedio = tempoTotal / count;
+				System.out.println("Tempo médio de ping: " + tempoMedio);
+				fluxo.close();
+				leitor.close();
+				buffer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
 }

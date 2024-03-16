@@ -14,7 +14,8 @@ public class Main {
 		while(controller != 9) {
 			
 			controller = Integer.parseInt(JOptionPane.showInputDialog("MENU PRINCIPAL\n\n"
-																	+ "1- Mostrar distribuição"));
+																	+ "1- Mostrar distribuição\n"
+																	+ "9 - Sair"));
 			switch(controller) {
 			case 1:
 				dc.exibeDistro();

@@ -40,6 +40,11 @@ public class DistoController {
 				String linha;
 				while((linha = buffer.readLine()) != null){
 					System.out.println(linha);
+					if(linha.contains("PRETTY_NAME=")) {
+						System.out.println(linha);
+					} else if(linha.contains("VERSION=")) {
+						System.out.println(linha);
+					}
 				}
 			} catch(IOException e) {
 				e.printStackTrace();				

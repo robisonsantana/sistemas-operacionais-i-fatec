@@ -65,6 +65,7 @@ public class RedesController {
 	}
 	
 	//Processo para ler os processos com IPv4.
+	@SuppressWarnings("deprecation")
 	public void readProcessIp(String comando) {
 		Process processo;
 		System.out.println("Adaptadores de Rede com IPv4:\n");
@@ -95,6 +96,7 @@ public class RedesController {
 	}
 	
 	//Processo para ler a média do ping de 10 processos. 
+	@SuppressWarnings("deprecation")
 	public void readProcessPing(String comando) {
 		Process processo;
 		try {
@@ -104,25 +106,26 @@ public class RedesController {
 			BufferedReader buffer = new BufferedReader(leitor);
 			String linha;	
 			int count = 0;
-			int tempoTotal = 0;
+			double tempoTotal = 0;
 			System.out.println("Aguarde...");
 			while((linha = buffer.readLine()) != null) {
-				String[] partes = linha.split("=");
-				for(String parte : partes) {
-					if(parte.contains("ms")) {
-						Pattern pattern = Pattern.compile("\\d+");
-						Matcher matcher = pattern.matcher(parte);
-						while (matcher.find()) {
-						    String number = matcher.group();
-						    if(count < 10) {
-						    	tempoTotal += Integer.parseInt(number);
-						    	count++;
-						    }
-						}
-					}
+				System.out.println(linha);
+				if(linha.contains("tempo=")) {
+					
+					//Capturando os índices do tempo 
+					int indiceInicio = linha.indexOf("tempo=") + 6; //Pegando o indice de "tempo=" e pulando +5 para que a o valor do tempo seja capturado
+					int indiceFim = linha.indexOf("ms"); //Pegando o indice do fim do tempo
+					
+					//Armazenando o valor encontrado em uma substring e convertendo para double
+					String tempoStr = linha.substring(indiceInicio, indiceFim);
+					
+					//Convertendo o tempo String para double
+					double tempo = Double.parseDouble(tempoStr);
+					tempoTotal += tempo;
+					count++;
 				}
 			}
-			int tempoMedio = tempoTotal / count;
+			double tempoMedio = tempoTotal / count;
 			System.out.println("Tempo médio de ping: " + tempoMedio);
 			fluxo.close();
 			leitor.close();

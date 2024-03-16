@@ -85,6 +85,7 @@ public class KillController {
 	}
 	
 	//Processo para ler os processos ativos.
+	@SuppressWarnings("deprecation")
 	public void readProcessList(String comando) {
 		Process processo;
 		try {
@@ -103,6 +104,7 @@ public class KillController {
 	
 	//Processo para matar processos, seja por nome ou PID.
 	
+	@SuppressWarnings("deprecation")
 	public void killProcess(String comando, String nameOrPid) {
 		StringBuffer buffer = new StringBuffer();
 		int pid = 0;

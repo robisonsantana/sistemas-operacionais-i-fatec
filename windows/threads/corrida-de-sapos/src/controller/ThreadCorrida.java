@@ -5,6 +5,7 @@ public class ThreadCorrida extends Thread {
 	private int puloMax;
 	private int distanciaMax;
 	private String nome;
+	private static int posicao;
 	
 	//Construtor
 	public ThreadCorrida(int puloMax, int distanciaMax, String nome) {
@@ -40,7 +41,8 @@ public class ThreadCorrida extends Thread {
 			}
 		}
 		//Print mostrando que o sapo chegou:
-		System.out.println("\n-> Sapo " + nome + " chegou!!! <-\n");
+		posicao++;
+		System.out.println("\n-> Sapo " + nome + " chegou em " + posicao + "º lugar!!! <-\n");
 	}
 
 }

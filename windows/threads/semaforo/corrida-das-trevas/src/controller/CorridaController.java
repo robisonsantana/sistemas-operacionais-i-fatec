@@ -29,6 +29,7 @@ public class CorridaController extends Thread{
 		portas();
 	}
 	
+	//Simulador da corrida:
 	private void corrida() {
 		int percurso = 0;
 		
@@ -74,6 +75,7 @@ public class CorridaController extends Thread{
 		
 	}
 	
+	//Somulador das portas
 	private void portas() {
 		
 		portaEscolhida = (int)((Math.random() * 4) + 1);
